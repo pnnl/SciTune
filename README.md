@@ -113,5 +113,5 @@ python -m llava.serve.cli \
 
 <figure style="text-align: center;">
     <img src="images/dashboard.png" width="70%">
-    <figcaption><em>Figure1: SciTune Vision Assistant</em></figcaption>
+    <figcaption style="text-align: center;"><em>Figure 1: SciTune Vision Assistant</em></figcaption>
 </figure>

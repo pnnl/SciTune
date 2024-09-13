@@ -1,93 +1,117 @@
-# SciTune
+<h1>
+  <img src="images/scitune.png" width="30" style="vertical-align: middle; display: inline-block;">
+  <span style="font-size: 2em; font-weight: bold; vertical-align: middle;">SciTune Vision Assistant</span>
+</h1>
 
 
+*Visual instruction tuning towards large language and vision models.*
 
-## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Contents
+- [Install](#Install)
+- [SciTune Weights](#SciTune-Weights)
+- [Inference](#Inference)
+- [Dashboard](#Dashboard)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
+## Install
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+If you are not using Linux, do *NOT* proceed, see instructions for [macOS](https://github.com/haotian-liu/LLaVA/blob/main/docs/macOS.md) and [Windows](https://github.com/haotian-liu/LLaVA/blob/main/docs/Windows.md).
 
+1. Clone this repository and navigate to SciTune folder
+```bash
+cd SciTune/
 ```
-cd existing_repo
-git remote add origin https://devops.pnnl.gov/steel-thread/scitune.git
-git branch -M main
-git push -uf origin main
+
+2. Install Package (Skip this step if using Docker)
+```Shell
+conda create -n llava python=3.10 -y
+conda activate llava
+pip install --upgrade pip  
+pip install -e .
 ```
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://devops.pnnl.gov/steel-thread/scitune/-/settings/integrations)
+## SciTune Weights
+In this Vision Assistant tool, we use the SciTune model, fine-tuned with the ScienceQA dataset, to demonstrate multimodal reasoning capabilities. The tool answers multiple-choice questions based on visual and textual information and generates an answer, along with a lecture and explanation supporting the answer.
 
-## Collaborate with your team
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## Inference 
+Model inference is performed by the worker(llava/serve/model_worker.py). The model worker performers inference on the GPU. The worker handles the input resquest that is either a text or a combination of text and image to generate the output in the form of text. 
 
-## Test and Deploy
 
-Use the built-in continuous integration in GitLab.
+## Dashboard
+Please follow the instructions below to run the dashbaord locally. 
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Gradio Web UI - Dokcer 
+Navigate to the SciTune directory in the repo and run the following command - 
+```bash
+docker compose up
+```
 
-***
+This will install all the dependencies and run the dashboard on port 7860 by default. Please update docker-compose.yaml file to update parameters like the model path name, ports etc.
 
-# Editing this README
+### Gradio Web UI - Without Docker 
+To launch a Gradio demo locally, please run the following commands one by one. If you plan to launch multiple model workers to compare between different checkpoints, you only need to launch the controller and the web server *ONCE*.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
-## Suggestions for a good README
+#### Launch a controller
+```Shell
+python -m llava.serve.controller --host 0.0.0.0 --port 10000
+```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+#### Launch a gradio web server.
+```Shell
+python -m llava.serve.gradio_web_server --controller http://localhost:10000 --model-list-mode reload
+```
+You just launched the Gradio web interface. Now, you can open the web interface with the URL printed on the screen. You may notice that there is no model in the model list. Do not worry, as we have not launched any model worker yet. It will be automatically updated when you launch a model worker.
 
-## Name
-Choose a self-explaining name for your project.
+#### Launch a model worker
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+This is the actual *worker* that performs the inference on the GPU.  Each worker is responsible for a single model specified in `--model-path`.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```Shell
+python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path liuhaotian/llava-v1.5-13b
+```
+Wait until the process finishes loading the model and you see "Uvicorn running on ...".  Now, refresh your Gradio web UI, and you will see the model you just launched in the model list.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+You can launch as many workers as you want, and compare between different model checkpoints in the same Gradio interface. Please keep the `--controller` the same, and modify the `--port` and `--worker` to a different port number for each worker.
+```Shell
+python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port <different from 40000, say 40001> --worker http://localhost:<change accordingly, i.e. 40001> --model-path <ckpt2>
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+If you are using an Apple device with an M1 or M2 chip, you can specify the mps device by using the `--device` flag: `--device mps`.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+#### Launch a model worker (Multiple GPUs, when GPU VRAM <= 24GB)
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+If the VRAM of your GPU is less than 24GB (e.g., RTX 3090, RTX 4090, etc.), you may try running it with multiple GPUs. Our latest code base will automatically try to use multiple GPUs if you have more than one GPU. You can specify which GPUs to use with `CUDA_VISIBLE_DEVICES`. Below is an example of running with the first two GPUs.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```Shell
+CUDA_VISIBLE_DEVICES=0,1 python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path liuhaotian/llava-v1.5-13b
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+#### Launch a model worker (4-bit, 8-bit inference, quantized)
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+You can launch the model worker with quantized bits (4-bit, 8-bit), which allows you to run the inference with reduced GPU memory footprint, potentially allowing you to run on a GPU with as few as 12GB VRAM. Note that inference with quantized bits may not be as accurate as the full-precision model. Simply append `--load-4bit` or `--load-8bit` to the **model worker** command that you are executing. Below is an example of running with 4-bit quantization.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```Shell
+python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path liuhaotian/llava-v1.5-13b --load-4bit
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+### CLI Inference
+
+Chat about images using LLaVA without the need of Gradio interface. It also supports multiple GPUs, 4-bit and 8-bit quantized inference. With 4-bit quantization, it uses less than 8GB VRAM on a single GPU.
+
+```Shell
+python -m llava.serve.cli \
+    --model-path <path_to_model_weights> \
+    --image-file "https://llava-vl.github.io/static/images/view.jpg" \
+    --load-4bit
+```
+
+<figure align="center">
+<img src="images/dashboard.png" width="70%">
+<figcaption style="text-align: center;"><em>Figure 1: SciTune Vision Assistant</em></figcaption>
+</figure>

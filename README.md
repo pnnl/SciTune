@@ -48,7 +48,7 @@ docker compose up
 
 This will install all the dependencies and run the dashboard on port 7860 by default. Please update docker-compose.yaml file to update parameters like the model path name, ports etc.
 
-### Gradio Web UI - Withoout Docker 
+### Gradio Web UI - Without Docker 
 To launch a Gradio demo locally, please run the following commands one by one. If you plan to launch multiple model workers to compare between different checkpoints, you only need to launch the controller and the web server *ONCE*.
 
 

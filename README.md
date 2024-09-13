@@ -1,5 +1,8 @@
-<img src="images/scitune.png" width="3%" style="vertical-align: bottom; display: inline-block;">
-<h1 style="display: inline-block; vertical-align: middle;">SciTune Vision Assistant</h1>
+<p>
+  <img src="images/scitune.png" width="30" style="vertical-align: middle; display: inline-block;">
+  <span style="font-size: 2em; font-weight: bold; vertical-align: middle;">SciTune Vision Assistant</span>
+</p>
+
 
 *Visual instruction tuning towards large language and vision models.*
 

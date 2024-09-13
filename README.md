@@ -111,7 +111,7 @@ python -m llava.serve.cli \
     --load-4bit
 ```
 
-<p style = "align:center">
+<figure style = "align:center">
 <img src="images/dashboard.png" width="70%">
 <figcaption style="text-align: center;"><em>Figure 1: SciTune Vision Assistant</em></figcaption>
-</p>
+</figure>

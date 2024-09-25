@@ -1,21 +1,27 @@
-from PIL import Image
-import json
-import os
-import random
-import pandas as pd
 from functools import reduce
-import re
-import sys
 from template import *
+from PIL import Image
+import pandas as pd
+import warnings
+import random
+import json
+import sys
+import os
+import re
+
+
 
 ## Download the SciCap dataset from HuggingFace
 ## https://huggingface.co/datasets/CrowdAILab/scicap
 
-data_base_dir=sys.argv[1]
+data_base_dir="/opt/scitune/dataset"
 data_path=f'{data_base_dir}/val.json'
 
+if not os.path.isfile(data_path):
+    warnings.warn("File does not exist. Please refer to the README instructions to download the data\n", UserWarning)
+    sys.exit()
 list_data_dict = json.load(open(data_path, "r"))
-list_data_df=pd.DataFrame(list_data_dict['images'])
+list_data_df = pd.DataFrame(list_data_dict['images'])
 
 print("# Images: ",len(list_data_dict['images']))
 print("# Annotations: ",len(list_data_dict['annotations']))

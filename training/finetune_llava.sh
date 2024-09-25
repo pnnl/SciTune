@@ -2,15 +2,15 @@
 
 CONDA_ENV="base"
 
-: ${MM_PROJECTOR_PATH:="/opt/scitune_data/evaluation/mm_projector/checkpoint-2600.bin"}
-: ${LLAVA_SCITUNE_SCIENCEQA_MODEL_DIR:="/opt/scitune_data/training/scienceqa_v0"}
+: ${MM_PROJECTOR_PATH:="/opt/scitune/models/LLAVA-3-pretrain-scitune-333472-v2-13B/mm_projector/checkpoint-2600.bin"}
+: ${LLAVA_SCITUNE_SCIENCEQA_MODEL_DIR:="/opt/scitune/models/scienceqa_v0"}
 mkdir -p ${LLAVA_SCITUNE_SCIENCEQA_MODEL_DIR}
 
 : ${SCRIPT_PATH:="/opt/scitune/training/llava/train"}
 : ${PROMPT_VERSION:="v0"}
-: ${MODEL_PATH:="/opt/scitune_data/LLAVA/13B"}
-: ${DATA_PATH:="/home/ubuntu/scitune_data/training/llava_train_QCM-LEPA.json"}
-: ${IMAGE_FOLDER:="/home/ubuntu/scitune_data/training/train"}
+: ${MODEL_PATH:="/opt/scitune/models/llama/13B"}
+: ${DATA_PATH:="/opt/scitune/dataset/llava_train_QCM-LEPA.json"} # Write instaructions to download the dataset in the README.md (Get instructions from Sameera)
+: ${IMAGE_FOLDER:="/opt/scitune/dataset/train"} # Write instaructions to download the dataset in the README.md step (Get instructions from Sameera)
 
 conda run -n ${CONDA_ENV} --no-capture-output \
     torchrun --nnodes=1 --nproc_per_node=1 --master_port=25001 \

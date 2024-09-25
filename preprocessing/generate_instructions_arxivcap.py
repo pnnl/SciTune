@@ -8,18 +8,22 @@ from datasets import load_dataset
 from functools import reduce
 import re
 import sys 
+import warnings
 from template import *
 
 ## Download the ArxivCap dataset from HuggingFace
 ## https://huggingface.co/datasets/MMInstruction/ArxivCap
-data_base_dir=sys.argv[1]
-file_type = sys.argv[2]
 
-## Randomly select a subset of dataset for faster lading
-data = load_dataset(
-    "parquet",
-    data_files=f"{data_base_dir}/{file_type}" 
-)
+try:
+    data_base_dir="/opt/scitune/dataset"
+    ## Randomly select a subset of dataset for faster lading
+    data = load_dataset(
+        "parquet",
+        data_files=f"{data_base_dir}/*.parquet" 
+    )
+except:
+    warnings.warn("Data does not exist. Please refer to the README instructions to download the data\n", UserWarning)
+    sys.exit()
 
 list_data_dict=[]
 for record in data['train']:

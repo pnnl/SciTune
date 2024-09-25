@@ -2,10 +2,10 @@
 CONDA_ENV="base"
 
 : ${SCRIPT_PATH:="/opt/scitune/training/llava/train"}
-: ${MODEL_PATH:="/rcfs/projects/steel_thread/models/LLAVA-2/13B"}
-: ${DATA_PATH:="/rcfs/projects/steel_thread/hora620/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/llava_scicap_sample_333472_v2.json"}
-: ${IMAGE_FOLDER:="/rcfs/projects/steel_thread/hora620/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/share-task-img-mask/arxiv/train"}
-: ${OUTPUT_DIR:="/rcfs/projects/steel_thread/models/LLAVA-3-pretrain-scitune-333472-v2-13B"}
+: ${MODEL_PATH:="/opt/scitune/models/llama/13B"}
+: ${DATA_PATH:="/opt/scitune/dataset/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/llava_scicap_sample_333472_v2.json"}
+: ${IMAGE_FOLDER:="/opt/scitune/dataset/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/share-task-img-mask/arxiv/train"}
+: ${OUTPUT_DIR:="/opt/scitune/models/LLAVA-3-pretrain-scitune-333472-v2-13B"}
 
 conda run -n ${CONDA_ENV} --no-capture-output \
     torchrun --nnodes=1 --nproc_per_node=1 --master_port=25001 \

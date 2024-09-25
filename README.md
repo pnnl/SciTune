@@ -8,6 +8,7 @@
 
 ## Contents
 - [Install](#Install)
+- [Prerequisites](#Prerequisites)
 - [SciTune Weights](#SciTune-Weights)
 - [Preprocessing](#preprocessing)
 - [Training](#training)
@@ -33,6 +34,15 @@ pip install --upgrade pip
 pip install -e .
 ```
 
+## Prerequisites
+- After cloning the repository, create 'dataset' and 'models' folder 
+```bash
+mkdir dataset
+mkdir models
+```
+Follow the instuctions below to download and save the data in dataset folder 
+- ArxivCap: https://huggingface.co/datasets/MMInstruction/ArxivCap 
+- SciCap: https://huggingface.co/datasets/CrowdAILab/scicap
 
 ## SciTune Weights
 In this Vision Assistant tool, we use the SciTune model, fine-tuned with the ScienceQA dataset, to demonstrate multimodal reasoning capabilities. The tool answers multiple-choice questions based on visual and textual information and generates an answer, along with a lecture and explanation supporting the answer.

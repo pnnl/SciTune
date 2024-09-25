@@ -7,14 +7,14 @@
 
 
 ## Contents
-- [Install](#Install)
-- [Prerequisites](#Prerequisites)
-- [SciTune Weights](#SciTune-Weights)
+- [Install](#install)
+- [Prerequisites](#prerequisites)
+- [SciTune Weights](#scitune-weights)
 - [Preprocessing](#preprocessing)
 - [Training](#training)
 - [Evaluation](#evaluation)
-- [Inference](#Inference)
-- [Dashboard](#Dashboard)
+- [Inference](#inference)
+- [Dashboard](#dashboard)
 
 
 ## Install

@@ -1,21 +1,27 @@
-from PIL import Image
-import json
-import os
-import random
-import pandas as pd
 from functools import reduce
+from template import *
+from PIL import Image
+import pandas as pd
+import warnings
+import random
+import json
+import sys
+import os
 import re
 
-from template import *
+
 
 ## Download the SciCap dataset from HuggingFace
 ## https://huggingface.co/datasets/CrowdAILab/scicap
 
-data_base_dir='/rcfs/projects/steel_thread/hora620/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/'
-data_path='/rcfs/projects/steel_thread/hora620/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/val.json'
-image_folder='/rcfs/projects/steel_thread/hora620/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/share-task-img-mask/arxiv/val'
+data_base_dir="/opt/scitune/dataset"
+data_path=f'{data_base_dir}/val.json'
+
+if not os.path.isfile(data_path):
+    warnings.warn("File does not exist. Please refer to the README instructions to download the data\n", UserWarning)
+    sys.exit()
 list_data_dict = json.load(open(data_path, "r"))
-list_data_df=pd.DataFrame(list_data_dict['images'])
+list_data_df = pd.DataFrame(list_data_dict['images'])
 
 print("# Images: ",len(list_data_dict['images']))
 print("# Annotations: ",len(list_data_dict['annotations']))
@@ -57,5 +63,6 @@ while data_record_index<mac_record_index:
     #     break;
 
 print(f'Number of samples: {len(target_format)}')
-with open(os.path.join(data_base_dir, f"scitune_scicap_training_{data_record_index}.json"), "w") as f:
+os.makedirs(f"{data_base_dir}/scicap_out", exist_ok=True)
+with open(os.path.join(f"{data_base_dir}/scicap_out", f"scitune_scicap_training_{data_record_index}.json"), "w") as f:
         json.dump(target_format, f, indent=2)

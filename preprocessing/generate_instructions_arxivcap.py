@@ -1,4 +1,5 @@
 from PIL import Image
+from tqdm import tqdm
 import json
 import os
 import random
@@ -6,18 +7,18 @@ import pandas as pd
 from datasets import load_dataset
 from functools import reduce
 import re
-
+import sys 
 from template import *
 
 ## Download the ArxivCap dataset from HuggingFace
 ## https://huggingface.co/datasets/MMInstruction/ArxivCap
-data_base_dir='/rcfs/projects/steel_thread/hora620/hf/hub/ArxivCap'
-
+data_base_dir=sys.argv[1]
+file_type = sys.argv[2]
 
 ## Randomly select a subset of dataset for faster lading
 data = load_dataset(
     "parquet",
-    data_files=f"{data_base_dir}/data/arXiv_src_9912_*.parquet" 
+    data_files=f"{data_base_dir}/{file_type}" 
 )
 
 list_data_dict=[]
@@ -32,39 +33,38 @@ for record in data['train']:
 
 target_format=[]
 data_record_index=0
-mac_record_index=len(list_data_dict['images'])
-while data_record_index<mac_record_index:
-    source=list_data_dict['images'][data_record_index]
-    annot_source=list_data_dict['annotations'][data_record_index]
-    ##print(source)
-    input=random.choice(detail_describe_instructions)
+print(list_data_dict[0].keys())
+mac_record_index=len(list_data_dict)
 
-    paragraph_text="\n".join(annot_source.get('paragraph',[]))
-    mention_text = reduce(lambda a,b:a+b, annot_source.get('mention',[[]]))
-    mention_text="\n".join(mention_text)
+target_format=[]
 
-    ocr_text='\t'.join(source.get('ocr',[]))
+os.makedirs(f"{data_base_dir}/arxiv_out", exist_ok=True)
 
-    output=source.get('figure_type','Image')+" "+annot_source['caption_no_index']
-    output+="\n"+ocr_text
-    output+="\n"+paragraph_text
-    output+="\n"+mention_text
+for idx, data_dict in tqdm(enumerate(list_data_dict), total=len(list_data_dict)):
+    for sub_idx, sub_figs in enumerate(data_dict['cil_pairs']):
+        out_dict = {}
+        out_dict['id'] = f"{idx}_{sub_idx}"
 
-    pattern = re.compile(r"\b(Fig(?:ure)?)\b", re.IGNORECASE)
-    output = re.sub(pattern, r"%s"%source.get('figure_type','Image'), output)
+        img_dir = sub_figs['image_file'].split("/")[0]
+        os.makedirs(f"{data_base_dir}/arxiv_out/images/{img_dir}", exist_ok=True)
+        sub_figs['image'].save(f"{data_base_dir}/arxiv_out/images/{sub_figs['image_file']}")
 
-    target_format.append({
-        "id": source['id'],
-        "image": source['file_name'],
-        "conversations": [
-            {'from': 'human', 'value': f"{input}\n<image>"},
-            {'from': 'gpt', 'value': f"{output}"},
-        ],
-    })
-    data_record_index+=1
-    # if data_record_index>500:
-    #     break;
+        out_dict['image_path'] = f"{data_base_dir}/arxiv_out/images/{sub_figs['image_file']}"
+
+        human_text = random.choice(detail_describe_instructions)
+        if len(sub_figs['sub_caption']) > 0:
+            gpt_text = sub_figs['sub_caption']
+        else:
+            gpt_text = data_dict['caption']
+
+        out_dict["conversation"] = [
+            {"from": "human", "value": human_text},
+            {"from": "gpt", "value": gpt_text}
+        ]
+
+        target_format.append(out_dict)
+
+        with open(f"{data_base_dir}/arxiv_out/{idx}_{sub_idx}.json", "w") as wf:
+            json.dump(out_dict, wf)
 
 print(f'Number of samples: {len(target_format)}')
-with open(os.path.join(data_base_dir, f"scitune_arxivcap_training_{data_record_index}.json"), "w") as f:
-        json.dump(target_format, f, indent=2)

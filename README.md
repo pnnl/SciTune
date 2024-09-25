@@ -1,8 +1,7 @@
-<h1>
+<p>
   <img src="images/scitune.png" width="30" style="vertical-align: middle; display: inline-block;">
   <span style="font-size: 2em; font-weight: bold; vertical-align: middle;">SciTune Vision Assistant</span>
-</h1>
-
+</p>
 
 *Visual instruction tuning towards large language and vision models.*
 
@@ -10,6 +9,9 @@
 ## Contents
 - [Install](#Install)
 - [SciTune Weights](#SciTune-Weights)
+- [Preprocessing](#preprocessing)
+- [Training](#training)
+- [Evaluation](#evaluation)
 - [Inference](#Inference)
 - [Dashboard](#Dashboard)
 
@@ -35,6 +37,45 @@ pip install -e .
 ## SciTune Weights
 In this Vision Assistant tool, we use the SciTune model, fine-tuned with the ScienceQA dataset, to demonstrate multimodal reasoning capabilities. The tool answers multiple-choice questions based on visual and textual information and generates an answer, along with a lecture and explanation supporting the answer.
 
+## Preprocessing
+To run the prpeprocessing script:
+```bash
+cd scitune/preprocessing
+'docker build -t scitune_preprocess .'. 
+'sudo docker run --mount type=bind,source=/home/ubuntu/scitune_data,target=/opt/scitune_data -it scitune_preprocess'
+```
+Above command activates interactive docker shell. Run preprocessing scripts inside docker shell-
+```bash
+python generate_instructions_arxivcap.py <datapath> <filetype>
+python generate_instructions_scicap.py <datapath>
+```
+
+## Training
+```bash
+cd scitune/training
+'docker build -t scitune_train .'. 
+'sudo docker run --mount type=bind,source=/home/ubuntu/scitune_data,target=/opt/scitune_data --gpus all -it scitune_preprocess'
+```
+Above command activates interactive docker shell. Run training bash scripts inside docker shell-
+```bash
+bash finetune_llava.sh
+bash train_llava.sh
+```
+
+## Evaluation
+To run the evaluation script:
+```bash
+cd scitune/evaluation
+'docker build -t scitune_eval .'. 
+'sudo docker run --mount type=bind,source=/home/ubuntu/scitune_data,target=/opt/scitune_data -it scitune_eval'
+```
+Above command activates interactive docker shell. Run evaluation scripts inside docker shell-
+```bash
+bash eval_llava_mathvista.sh
+bash eval_llava_scicap.sh
+bash eval_llava_scienceqa.sh
+bash eval_llava_vistext.sh
+```
 
 ## Inference 
 Model inference is performed by the worker(llava/serve/model_worker.py). The model worker performers inference on the GPU. The worker handles the input resquest that is either a text or a combination of text and image to generate the output in the form of text. 
@@ -51,7 +92,7 @@ docker compose up
 
 This will install all the dependencies and run the dashboard on port 7860 by default. Please update docker-compose.yaml file to update parameters like the model path name, ports etc.
 
-### Gradio Web UI - Without Docker 
+### Gradio Web UI - Withoout Docker 
 To launch a Gradio demo locally, please run the following commands one by one. If you plan to launch multiple model workers to compare between different checkpoints, you only need to launch the controller and the web server *ONCE*.
 
 
@@ -102,7 +143,7 @@ python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:
 
 ### CLI Inference
 
-Chat about images using LLaVA without the need of Gradio interface. It also supports multiple GPUs, 4-bit and 8-bit quantized inference. With 4-bit quantization, it uses less than 8GB VRAM on a single GPU.
+Chat about images using LLaVA without the need of Gradio interface. It also supports multiple GPUs, 4-bit and 8-bit quantized inference. With 4-bit quantization, for our LLaVA-1.5-7B, it uses less than 8GB VRAM on a single GPU.
 
 ```Shell
 python -m llava.serve.cli \
@@ -110,8 +151,10 @@ python -m llava.serve.cli \
     --image-file "https://llava-vl.github.io/static/images/view.jpg" \
     --load-4bit
 ```
-
-<figure align="center">
+<p style = "align:center">
 <img src="images/dashboard.png" width="70%">
 <figcaption style="text-align: center;"><em>Figure 1: SciTune Vision Assistant</em></figcaption>
-</figure>
+</p>
+
+
+

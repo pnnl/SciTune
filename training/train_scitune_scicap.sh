@@ -2,15 +2,15 @@
 CONDA_ENV="base"
 
 : ${SCRIPT_PATH:="/opt/scitune/training/llava/train"}
-: ${MODEL_PATH:="/opt/scitune/models/llama/13B"}
-: ${DATA_PATH:="/opt/scitune/dataset/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/llava_scicap_sample_333472_v2.json"}
-: ${IMAGE_FOLDER:="/opt/scitune/dataset/hf/hub/datasets--CrowdAILab--scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/share-task-img-mask/arxiv/train"}
-: ${OUTPUT_DIR:="/opt/scitune/models/LLAVA-3-pretrain-scitune-333472-v2-13B"}
+: ${LLAMA_MODEL_DIR:="/opt/scitune/models/llama/13B"} ## Base LLaMA Model weights
+: ${DATA_PATH:="/opt/scitune/dataset/scicap/scitune_instructions/scitune_scicap_training.json"}  ## Generated scitune training instructions from the scicap dataset
+: ${IMAGE_FOLDER:="/opt/scitune/dataset/scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/share-task-img-mask/arxiv/train"} ## SciCap Image Folder 
+: ${OUTPUT_DIR:="/opt/scitune/models/scitune-scicap"}
 
 conda run -n ${CONDA_ENV} --no-capture-output \
     torchrun --nnodes=1 --nproc_per_node=1 --master_port=25001 \
         ${SCRIPT_PATH}/train_mem.py \
-        --model_name_or_path ${MODEL_PATH} \
+        --model_name_or_path ${LLAMA_MODEL_DIR} \
         --data_path ${DATA_PATH} \
         --image_folder ${IMAGE_FOLDER} \
         --vision_tower openai/clip-vit-large-patch14 \

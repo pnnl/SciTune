@@ -14,11 +14,11 @@ import re
 ## Download the SciCap dataset from HuggingFace
 ## https://huggingface.co/datasets/CrowdAILab/scicap
 
-data_base_dir="/opt/scitune/dataset"
+data_base_dir="/opt/scitune/dataset/scicap"
 data_path=f'{data_base_dir}/val.json'
 
 if not os.path.isfile(data_path):
-    warnings.warn("File does not exist. Please refer to the README instructions to download the data\n", UserWarning)
+    warnings.warn("Dataset does not exist. Please refer to the README instructions to download the data\n", UserWarning)
     sys.exit()
 list_data_dict = json.load(open(data_path, "r"))
 list_data_df = pd.DataFrame(list_data_dict['images'])
@@ -63,6 +63,6 @@ while data_record_index<mac_record_index:
     #     break;
 
 print(f'Number of samples: {len(target_format)}')
-os.makedirs(f"{data_base_dir}/scicap_out", exist_ok=True)
-with open(os.path.join(f"{data_base_dir}/scicap_out", f"scitune_scicap_training_{data_record_index}.json"), "w") as f:
+os.makedirs(f"{data_base_dir}/scitune_instructions", exist_ok=True)
+with open(os.path.join(f"{data_base_dir}/scitune_instructions", f"scitune_scicap_training.json"), "w") as f:
         json.dump(target_format, f, indent=2)

@@ -3,11 +3,11 @@
 
 CONDA_ENV="base"
 
-: ${LLAMA_MODEL_DIR="/opt/scitune_data/evaluation/13B"}
-: ${MM_PROJECTOR_PATH="/opt/scitune_data/evaluation/mm_projector/checkpoint-2600.bin"}
-: ${QUESTION_FILE:="/opt/scitune_data/evaluation/llava_vistext_validation_caption_L1_1202.json"}
-: ${IMAGE_FOLDER:="/opt/scitune_data/evaluation/vistext"}
-: ${ANSWERS_FILE:="/opt/scitune_data/evaluation/llava_val_vistext_prediction_caption_L1_1202.jsonl"}
+: ${LLAMA_MODEL_DIR="/opt/scitune/models/llama/13B"}
+: ${MM_PROJECTOR_PATH:="/opt/scitune/models/scitune-scicap/mm_projector/checkpoint-*.bin"}  ## Please define the scitune-scicap checkpoint location
+: ${QUESTION_FILE:="/opt/scitune/dataset/vistext/scitune_instructions/scitune_vistext_validation.json"}  ## Generated scitune validation instructions from the vistext dataset
+: ${IMAGE_FOLDER:="/opt/scitune/dataset/vistext/"}
+: ${ANSWERS_FILE:="/opt/scitune/dataset/vistext/scitune_vistext_prediction.jsonl"}
 
 ## single GPU
 conda run -n ${CONDA_ENV} --no-capture-output \

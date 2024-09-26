@@ -2,10 +2,10 @@
 
 CONDA_ENV="base"
 : ${LLAMA_MODEL_DIR:="/opt/scitune_data/evaluation/13B"}
-: ${MM_PROJECTOR_PATH:="/opt/scitune_data/evaluation/mm_projector/checkpoint-2600.bin"}
-: ${QUESTION_FILE:="/opt/scitune_data/evaluation/mathvista/data/llava_mathvista_val_1000.json"}
-: ${IMAGE_FOLDER:="/opt/scitune_data/evaluation/mathvista/data"}
-: ${ANSWERS_FILE:="/opt/scitune_data/evaluation/mathvista/llava_val_mathvista_prediction_1000_v2.jsonl"}
+: ${MM_PROJECTOR_PATH:="/opt/scitune/models/scitune-scicap/mm_projector/checkpoint-*.bin"}  ## Please define the scitune-scicap checkpoint location
+: ${QUESTION_FILE:="/opt/scitune/dataset/mathvista/data/scitune_mathvista_validation.json"}  ## Generated scitune validation instructions from the mathvista dataset
+: ${IMAGE_FOLDER:="/opt/scitune/dataset/mathvista/data/"}
+: ${ANSWERS_FILE:="/opt/scitune/dataset/mathvista/scitune_mathvista_prediction.jsonl"}
 
 ## single GPU
 conda run -n ${CONDA_ENV} --no-capture-output \

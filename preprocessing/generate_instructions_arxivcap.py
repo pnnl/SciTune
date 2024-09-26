@@ -15,14 +15,14 @@ from template import *
 ## https://huggingface.co/datasets/MMInstruction/ArxivCap
 
 try:
-    data_base_dir="/opt/scitune/dataset"
+    data_base_dir="/opt/scitune/dataset/arxivcap"
     ## Randomly select a subset of dataset for faster lading
     data = load_dataset(
         "parquet",
         data_files=f"{data_base_dir}/*.parquet" 
     )
 except:
-    warnings.warn("Data does not exist. Please refer to the README instructions to download the data\n", UserWarning)
+    warnings.warn("Dataset does not exist. Please refer to the README instructions to download the data\n", UserWarning)
     sys.exit()
 
 list_data_dict=[]
@@ -42,7 +42,7 @@ mac_record_index=len(list_data_dict)
 
 target_format=[]
 
-os.makedirs(f"{data_base_dir}/arxiv_out", exist_ok=True)
+os.makedirs(f"{data_base_dir}/scitune_instructions", exist_ok=True)
 
 for idx, data_dict in tqdm(enumerate(list_data_dict), total=len(list_data_dict)):
     for sub_idx, sub_figs in enumerate(data_dict['cil_pairs']):
@@ -50,10 +50,10 @@ for idx, data_dict in tqdm(enumerate(list_data_dict), total=len(list_data_dict))
         out_dict['id'] = f"{idx}_{sub_idx}"
 
         img_dir = sub_figs['image_file'].split("/")[0]
-        os.makedirs(f"{data_base_dir}/arxiv_out/images/{img_dir}", exist_ok=True)
-        sub_figs['image'].save(f"{data_base_dir}/arxiv_out/images/{sub_figs['image_file']}")
+        os.makedirs(f"{data_base_dir}/scitune_instructions/images/{img_dir}", exist_ok=True)
+        sub_figs['image'].save(f"{data_base_dir}/scitune_instructions/images/{sub_figs['image_file']}")
 
-        out_dict['image_path'] = f"{data_base_dir}/arxiv_out/images/{sub_figs['image_file']}"
+        out_dict['image_path'] = f"{data_base_dir}/scitune_instructions/images/{sub_figs['image_file']}"
 
         human_text = random.choice(detail_describe_instructions)
         if len(sub_figs['sub_caption']) > 0:
@@ -68,7 +68,7 @@ for idx, data_dict in tqdm(enumerate(list_data_dict), total=len(list_data_dict))
 
         target_format.append(out_dict)
 
-        with open(f"{data_base_dir}/arxiv_out/{idx}_{sub_idx}.json", "w") as wf:
+        with open(f"{data_base_dir}/scitune_instructions/{idx}_{sub_idx}.json", "w") as wf:
             json.dump(out_dict, wf)
 
 print(f'Number of samples: {len(target_format)}')

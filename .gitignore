@@ -33,3 +33,7 @@ ckpts*
 
 # Demo
 serve_images/
+
+## Dataset and Model folders
+./dataset
+./models

@@ -2,20 +2,20 @@
 
 CONDA_ENV="base"
 
-: ${MM_PROJECTOR_PATH:="/opt/scitune/models/LLAVA-3-pretrain-scitune-333472-v2-13B/mm_projector/checkpoint-2600.bin"}
-: ${LLAVA_SCITUNE_SCIENCEQA_MODEL_DIR:="/opt/scitune/models/scienceqa_v0"}
-mkdir -p ${LLAVA_SCITUNE_SCIENCEQA_MODEL_DIR}
+: ${MM_PROJECTOR_PATH:="/opt/scitune/models/scitune-scicap/mm_projector/checkpoint-*.bin"} ## Please define the scitune-scicap checkpoint location
+: ${SCITUNE_SCIENCEQA_MODEL_DIR:="/opt/scitune/models/scitune-scienceqa/"}
+mkdir -p ${SCITUNE_SCIENCEQA_MODEL_DIR}
 
 : ${SCRIPT_PATH:="/opt/scitune/training/llava/train"}
 : ${PROMPT_VERSION:="v0"}
-: ${MODEL_PATH:="/opt/scitune/models/llama/13B"}
-: ${DATA_PATH:="/opt/scitune/dataset/llava_train_QCM-LEPA.json"} # Write instaructions to download the dataset in the README.md (Get instructions from Sameera)
-: ${IMAGE_FOLDER:="/opt/scitune/dataset/train"} # Write instaructions to download the dataset in the README.md step (Get instructions from Sameera)
+: ${LLAMA_MODEL_DIR:="/opt/scitune/models/llama/13B"} ## Base LLaMA Model weights
+: ${DATA_PATH:="/opt/scitune/dataset/scienceqa/scienceqa_train_QCM-LEPA.json"} # Generated in the preprocessing stage
+: ${IMAGE_FOLDER:="/opt/scitune/dataset/scienceqa/images/train"} # ScienceQA image folder
 
 conda run -n ${CONDA_ENV} --no-capture-output \
     torchrun --nnodes=1 --nproc_per_node=1 --master_port=25001 \
         ${SCRIPT_PATH}/train_mem.py \
-        --model_name_or_path ${MODEL_PATH} \
+        --model_name_or_path ${LLAMA_MODEL_DIR} \
         --version ${PROMPT_VERSION} \
         --data_path ${DATA_PATH} \
         --image_folder ${IMAGE_FOLDER} \
@@ -23,7 +23,7 @@ conda run -n ${CONDA_ENV} --no-capture-output \
         --pretrain_mm_mlp_adapter ${MM_PROJECTOR_PATH} \
         --mm_vision_select_layer -2 \
         --bf16 True \
-        --output_dir ${LLAVA_SCITUNE_SCIENCEQA_MODEL_DIR} \
+        --output_dir ${SCITUNE_SCIENCEQA_MODEL_DIR} \
         --num_train_epochs 1 \
         --per_device_train_batch_size 4 \
         --per_device_eval_batch_size 4 \

@@ -3,19 +3,24 @@
   <span style="font-size: 2em; font-weight: bold; vertical-align: middle;">SciTune Vision Assistant</span>
 </p>
 
-*Visual instruction tuning towards large language and vision models.*
+*Scientific multimodal instruction tuning with large language and vision models.*
 
 
 ## Contents
+- [SciTune Model](#scitune-models)
 - [Install](#install)
 - [Prerequisites](#prerequisites)
-- [SciTune Weights](#scitune-weights)
 - [Preprocessing](#preprocessing)
 - [Training](#training)
 - [Evaluation](#evaluation)
 - [Inference](#inference)
 - [Dashboard](#dashboard)
 
+## SciTune Models
+SciTune is fine-tuned with the ScienceQA and SciCap datasets to demonstrate multimodal reasoning capabilities. 
+We released two model checkpoints in the [Berkeley Data Cloud](https://bdc.lbl.gov/).
+- [SciTune-SciCap](#) for image captioning tasks. This model is trained over the [LlaMA-1-13B](https://huggingface.co/meta-llama) and [CLIP](https://huggingface.co/openai/clip-vit-large-patch14) as the base models with the SciTune instructions generated on the [SciCap](https://huggingface.co/datasets/CrowdAILab/scicap) dataset.
+- [SciTune-ScienceQA](#) for scientific visual question answering task. This model is finetuned over the SciTune-SciCap with the [ScienceQA](https://huggingface.co/datasets/derek-thomas/ScienceQA) dataset. The model can answer multiple-choice questions based on visual and textual information provided as context along with a lecture and explanation supporting the answer.
 
 ## Install
 
@@ -35,17 +40,26 @@ pip install -e .
 ```
 
 ## Prerequisites
-- After cloning the repository, create 'dataset' and 'models' folder 
+After cloning the repository, create 'dataset' and 'models' folder 
 ```bash
 mkdir dataset
 mkdir models
 ```
-Follow the instuctions below to download and save the data in dataset folder 
-- ArxivCap: https://huggingface.co/datasets/MMInstruction/ArxivCap 
-- SciCap: https://huggingface.co/datasets/CrowdAILab/scicap
+Please download the following multimodal datasets into the `dataset` folder. These datasets will be used in the finetuning and evaluation tasks.
+- [ArxivCap](https://huggingface.co/datasets/MMInstruction/ArxivCap)
+- [SciCap](https://huggingface.co/datasets/CrowdAILab/scicap)
+- [ScienceQA](https://huggingface.co/datasets/derek-thomas/ScienceQA)
+- [VisText](https://github.com/mitvis/vistext)
+- [MathVista](https://huggingface.co/datasets/AI4Math/MathVista)
 
-## SciTune Weights
-In this Vision Assistant tool, we use the SciTune model, fine-tuned with the ScienceQA dataset, to demonstrate multimodal reasoning capabilities. The tool answers multiple-choice questions based on visual and textual information and generates an answer, along with a lecture and explanation supporting the answer.
+Please download the following models into the `models` folder. They will be used as based models in the SciTune training. 
+- [LlaMA-2-13B](https://huggingface.co/meta-llama/Llama-2-13b)
+- [CLIP](https://huggingface.co/openai/clip-vit-large-patch14)
+
+Note: SciTune can be trained with any LLM and vision encoder as the base models. In our experiments, we used the base (non-chat) LlaMA-2-13B and CLIP models.
+
+
+
 
 ## Preprocessing
 To run the prpeprocessing script:
@@ -56,8 +70,9 @@ cd scitune/preprocessing
 ```
 Above command activates interactive docker shell. Run preprocessing scripts inside docker shell-
 ```bash
-python generate_instructions_arxivcap.py <datapath> <filetype>
-python generate_instructions_scicap.py <datapath>
+python generate_instructions_arxivcap.py
+python generate_instructions_scicap.py
+bash generate_instructions_scienceqa.sh
 ```
 
 ## Training
@@ -68,8 +83,8 @@ cd scitune/training
 ```
 Above command activates interactive docker shell. Run training bash scripts inside docker shell-
 ```bash
-bash finetune_llava.sh
-bash train_llava.sh
+bash train_scitune_scicap.sh
+bash train_scitune_scienceqa.sh
 ```
 
 ## Evaluation
@@ -81,10 +96,11 @@ cd scitune/evaluation
 ```
 Above command activates interactive docker shell. Run evaluation scripts inside docker shell-
 ```bash
-bash eval_llava_mathvista.sh
 bash eval_llava_scicap.sh
-bash eval_llava_scienceqa.sh
 bash eval_llava_vistext.sh
+bash eval_llava_mathvista.sh
+bash eval_llava_scienceqa.sh
+
 ```
 
 ## Inference 

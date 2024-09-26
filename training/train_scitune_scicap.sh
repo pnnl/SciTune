@@ -3,7 +3,7 @@ CONDA_ENV="base"
 
 : ${SCRIPT_PATH:="/opt/scitune/training/llava/train"}
 : ${LLAMA_MODEL_DIR:="/opt/scitune/models/llama/13B"} ## Base LLaMA Model weights
-: ${DATA_PATH:="/opt/scitune/dataset/scicap/scitune_instructions/scitune_scicap_training.json"}  ## Generated scitune training instructions from the scicap dataset
+: ${DATA_PATH:="/opt/scitune/dataset/scicap/scitune_instructions/scitune_scicap_train.json"}  ## Generated scitune training instructions from the scicap dataset
 : ${IMAGE_FOLDER:="/opt/scitune/dataset/scicap/snapshots/203770e81e7ff9facdd4a1b35048a3e3abf5ebcf/share-task-img-mask/arxiv/train"} ## SciCap Image Folder 
 : ${OUTPUT_DIR:="/opt/scitune/models/scitune-scicap"}
 

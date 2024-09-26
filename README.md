@@ -7,7 +7,7 @@
 
 
 ## Contents
-- [SciTune Model](#scitune-models)
+- [SciTune Models](#scitune-models)
 - [Install](#install)
 - [Prerequisites](#prerequisites)
 - [Preprocessing](#preprocessing)
@@ -70,9 +70,11 @@ cd scitune/preprocessing
 ```
 Above command activates interactive docker shell. Run preprocessing scripts inside docker shell-
 ```bash
+python generate_instructions_scicap.py {train,val}
+python generate_instructions_vistext.py {train,test,validation}
 python generate_instructions_arxivcap.py
-python generate_instructions_scicap.py
-bash generate_instructions_scienceqa.sh
+python generate_instructions_mathvista.py {testmini,test}
+bash generate_instructions_scienceqa.sh {train,val,minival,test,minitest}
 ```
 
 ## Training

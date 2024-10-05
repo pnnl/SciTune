@@ -1,10 +1,10 @@
 #!/bin/bash
 
 CONDA_ENV="base"
-: ${LLAMA_MODEL_DIR:="/opt/scitune_data/evaluation/13B"}
-: ${MM_PROJECTOR_PATH:="/opt/scitune/models/scitune-scicap/mm_projector/checkpoint-*.bin"}  ## Please define the scitune-scicap checkpoint location
-: ${QUESTION_FILE:="/opt/scitune/dataset/mathvista/data/scitune_mathvista_validation.json"}  ## Generated scitune validation instructions from the mathvista dataset
-: ${IMAGE_FOLDER:="/opt/scitune/dataset/mathvista/data/"}
+: ${LLAMA_MODEL_DIR:="/opt/scitune/models/llama/13B"}
+: ${MM_PROJECTOR_PATH:="/opt/scitune/models/scitune-scicap/mm_projector/checkpoint-2600.bin"} 
+: ${QUESTION_FILE:="/opt/scitune/dataset/mathvista/scitune_instructions/scitune_mathvista_validation.json"}  ## Generated scitune validation instructions from the mathvista dataset
+: ${IMAGE_FOLDER:="/opt/scitune/dataset/mathvista/images/"}
 : ${ANSWERS_FILE:="/opt/scitune/dataset/mathvista/scitune_mathvista_prediction.jsonl"}
 
 ## single GPU

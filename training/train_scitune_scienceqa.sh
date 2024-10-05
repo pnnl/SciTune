@@ -2,7 +2,7 @@
 
 CONDA_ENV="base"
 
-: ${MM_PROJECTOR_PATH:="/opt/scitune/models/scitune-scicap/mm_projector/checkpoint-*.bin"} ## Please define the scitune-scicap checkpoint location
+: ${MM_PROJECTOR_PATH:="/opt/scitune/models/scitune-scicap/mm_projector/checkpoint-4500.bin"} #
 : ${SCITUNE_SCIENCEQA_MODEL_DIR:="/opt/scitune/models/scitune-scienceqa/"}
 mkdir -p ${SCITUNE_SCIENCEQA_MODEL_DIR}
 

@@ -17,13 +17,13 @@ import re
 split=sys.argv[1]
 
 data_base_dir="/opt/scitune/dataset/vistext"
-data_path=f'{data_base_dir}/data/data_{split}.json'
+data_path=f'{data_base_dir}/data_{split}.json'
 
 if not os.path.isfile(data_path):
     warnings.warn("Dataset does not exist. Please refer to the README instructions to download the data\n", UserWarning)
     sys.exit()
 list_data_dict = json.load(open(data_path, "r"))
-list_data_df = pd.DataFrame(list_data_dict['images'])
+list_data_df = pd.DataFrame(list_data_dict)
 
 print("# Images: ",len(list_data_dict))
 

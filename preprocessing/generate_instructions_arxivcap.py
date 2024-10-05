@@ -15,7 +15,7 @@ from template import *
 ## https://huggingface.co/datasets/MMInstruction/ArxivCap
 
 try:
-    data_base_dir="/opt/scitune/dataset/arxivcap"
+    data_base_dir="/opt/scitune/dataset/arxivcap/data"
     ## Randomly select a subset of dataset for faster lading
     data = load_dataset(
         "parquet",

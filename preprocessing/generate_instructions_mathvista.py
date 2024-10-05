@@ -16,7 +16,7 @@ import re
 
 split=sys.argv[1]
 
-data_base_dir="/opt/scitune/dataset/mathvista"
+data_base_dir="/opt/scitune/dataset/mathvista/data"
 data_path=f'{data_base_dir}/data/{split}.json'
 
 if not os.path.isfile(data_path):
@@ -29,7 +29,7 @@ print("# Images: ",len(data))
 target_format=[]
 data_record_index=0
 for _index,_record in data.items():
-    input_query=query_data[_index]
+    input_query=data[_index]
     output=_record['answer']
     target_format.append({
             "id": _index,

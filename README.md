@@ -182,7 +182,7 @@ You can launch the model worker with quantized bits (4-bit, 8-bit), which allows
 python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path liuhaotian/llava-v1.5-13b --load-4bit
 ```
 
-<p style = "align:center">
-<img src="images/dashboard.png" width="70%" style = "align:center">
+<p style align="center">
+<img src="images/dashboard.png" width="70%">
 <figcaption style="text-align: center;"><em>Figure 1: SciTune Vision Assistant</em></figcaption>
 </p>

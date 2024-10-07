@@ -48,9 +48,9 @@ mkdir models
 Please run the following command to download multimodal datasets into the `dataset` folder. These datasets will be used in the finetuning and evaluation tasks.
 
 ```bash
-bash download_data.sh
+bash scitune/preprocessing/download_data.sh
 ```
-This will download all the dataset into the `dataset` folder. Please refer below links for more details about the dataset. 
+This will download all the dataset into the `dataset` folder. Please refer below links for more details about the dataset. The use of these datasets must comply with the corresponding licenses.
 - [ArxivCap](https://huggingface.co/datasets/MMInstruction/ArxivCap)
 - [SciCap](https://huggingface.co/datasets/CrowdAILab/scicap)
 - [ScienceQA](https://huggingface.co/datasets/derek-thomas/ScienceQA)
@@ -127,7 +127,7 @@ python -m llava.serve.cli \
 ## Dashboard
 Please follow the instructions below to run the dashbaord locally. 
 
-### Gradio Web UI - Dokcer 
+### Gradio Web UI - Docker 
 Navigate to the SciTune directory in the repo and run the following command - 
 ```bash
 docker compose up

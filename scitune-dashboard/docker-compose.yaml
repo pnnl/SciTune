@@ -43,7 +43,7 @@ services:
             CONTROLLER_PORT: 10000
             WORKER_PORT: 40000
             DATA_DIR: '/tmp/data'
-            MODEL: 'model_test_sqa/scitune-llava-checkpoint-4500'
+            MODEL: '<path_to_model_weights>'
         deploy:
           resources:
             reservations:

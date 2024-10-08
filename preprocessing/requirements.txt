@@ -1,0 +1,4 @@
+pandas==2.2.2
+datasets==3.0.0
+pillow==10.4.0
+fire==0.7.0

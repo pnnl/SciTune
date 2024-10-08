@@ -1,0 +1,62 @@
+services:        
+    dashboard:
+        depends_on:
+            controller:
+                condition: service_healthy
+        image: "dashboard"
+        network_mode: "host" 
+        build: 
+            context: ./dashboard
+            dockerfile: Dockerfile
+        environment:
+            CONTROLLER_PORT: 10000
+
+    controller:
+        depends_on:
+            base-image:
+                condition: service_completed_successfully
+        image: "controller"
+        network_mode: "host" 
+        build: 
+            context: ./controller
+            dockerfile: Dockerfile
+        environment:
+            CONTROLLER_PORT: 10000
+        healthcheck:
+            test: ["CMD", "curl", "-f" , "-X", "POST", "http://localhost:10000/list_models"]
+            interval: 2s
+            timeout: 10s
+            retries: 5
+
+    worker:
+        depends_on:
+          base-image:
+            condition: service_completed_successfully
+        image: "worker"
+        network_mode: "host" 
+        volumes:
+            - /home/ubuntu/scitune_data/:/tmp/data
+        build: 
+            context: ./worker
+            dockerfile: Dockerfile
+        environment:
+            CONTROLLER_PORT: 10000
+            WORKER_PORT: 40000
+            DATA_DIR: '/tmp/data'
+            MODEL: '<path_to_model_weights>'
+        deploy:
+          resources:
+            reservations:
+              devices:
+                - driver: nvidia
+                  count: all
+                  capabilities: [gpu]
+
+    base-image:
+        image: "base-image"
+        build:
+            context: .
+            dockerfile: Dockerfile
+
+
+    

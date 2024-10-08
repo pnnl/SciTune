@@ -21,8 +21,8 @@
 ## SciTune Models
 SciTune is fine-tuned with the ScienceQA and SciCap datasets to demonstrate multimodal reasoning capabilities. 
 We released two model checkpoints in the [Berkeley Data Cloud](https://bdc.lbl.gov/).
-- [SciTune-SciCap](#) for image captioning tasks. This model is trained over the [LlaMA-1-13B](https://huggingface.co/meta-llama) and [CLIP](https://huggingface.co/openai/clip-vit-large-patch14) as the base models with the SciTune instructions generated on the [SciCap](https://huggingface.co/datasets/CrowdAILab/scicap) dataset.
-- [SciTune-ScienceQA](#) for scientific visual question answering task. This model is finetuned over the SciTune-SciCap with the [ScienceQA](https://huggingface.co/datasets/derek-thomas/ScienceQA) dataset. The model can answer multiple-choice questions based on visual and textual information provided as context along with a lecture and explanation supporting the answer.
+- [SciTune-SciCap](#) for image captioning tasks. This model is trained over the [LlaMA-1-13B](https://huggingface.co/meta-llama) and [CLIP](https://huggingface.co/openai/clip-vit-large-patch14) as the base models with the SciTune instructions generated on the [SciCap](https://huggingface.co/datasets/CrowdAILab/scicap) dataset. We only released the SciTun Adapter weights. Please use it with the combination of LLaMA and CLIP model weights. Please reference the [Evaluation](#evaluation) section for sample code.
+- [SciTune-ScienceQA](#) for scientific visual question answering task. This model is finetuned over the SciTune-SciCap with the [ScienceQA](https://huggingface.co/datasets/derek-thomas/ScienceQA) dataset. The model can answer multiple-choice questions based on visual and textual information provided as context along with a lecture and explanation supporting the answer. Please reference the [Inference](#inference) and [Dashboard](#dashboard) sections for sample inference code.
 
 ## Install
 
@@ -103,13 +103,16 @@ cd scitune/evaluation
 'docker build -t scitune_eval .'. 
 'docker run --mount type=bind,source=/home/ubuntu/scitune/dataset,target=/opt/scitune/dataset -it scitune_eval'
 ```
-Above command activates interactive docker shell. Run evaluation scripts inside docker shell-
+Above command activates interactive docker shell. Run evaluation scripts inside docker shell.
+* SciTune-SciCap Model Evaluation
 ```bash
 bash eval_llava_scicap.sh
 bash eval_llava_vistext.sh
 bash eval_llava_mathvista.sh
+```
+* SciTune-ScienceQA Model Evaluation
+```bash
 bash eval_llava_scienceqa.sh
-
 ```
 
 ## Inference 

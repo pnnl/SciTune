@@ -21,6 +21,7 @@
 ## SciTune Models
 SciTune is fine-tuned with the ScienceQA and SciCap datasets to demonstrate multimodal reasoning capabilities. 
 We released two model checkpoints in the [Berkeley Data Cloud](https://bdc.lbl.gov/).
+Please email steelthread [at] pnnl [dot] gov for model access.
 - [SciTune-SciCap](#) for image captioning tasks. This model is trained over the [LlaMA-1-13B](https://huggingface.co/meta-llama) and [CLIP](https://huggingface.co/openai/clip-vit-large-patch14) as the base models with the SciTune instructions generated on the [SciCap](https://huggingface.co/datasets/CrowdAILab/scicap) dataset. We only released the SciTun Adapter weights. Please use it with the combination of LLaMA and CLIP model weights. Please reference the [Evaluation](#evaluation) section for sample code.
 - [SciTune-ScienceQA](#) for scientific visual question answering task. This model is finetuned over the SciTune-SciCap with the [ScienceQA](https://huggingface.co/datasets/derek-thomas/ScienceQA) dataset. The model can answer multiple-choice questions based on visual and textual information provided as context along with a lecture and explanation supporting the answer. Please reference the [Inference](#inference) and [Dashboard](#dashboard) sections for sample inference code.
 
@@ -193,10 +194,20 @@ python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:
 </p>
 
 ## Publications
-Horawalavithana, Sameera, et al. "Scitune: Aligning large language models with scientific multimodal instructions." The First Workshop on NLP for Science, The Conference on Empirical Methods in Natural Language Processing (EMNLP), November, 2024 (<a src="https://arxiv.org/abs/2307.01139">PDF</a>).
+Horawalavithana, Sameera, et al. "Scitune: Aligning large language models with scientific multimodal instructions." The First Workshop on NLP for Science, The Conference on Empirical Methods in Natural Language Processing (EMNLP), November, 2024 (<a src="https://aclanthology.org/2024.nlp4science-1.7.pdf">PDF</a>).
+
+```
+@inproceedings{horawalavithana2024scitune,
+  title={SCITUNE: Aligning Large Language Models with Human-Curated Scientific Multimodal Instructions},
+  author={Horawalavithana, Sameera and Munikoti, Sai and Stewart, Ian and Kvinge, Henry and Pazdernik, Karl},
+  booktitle={Proceedings of the 1st Workshop on NLP for Science (NLP4Science)},
+  pages={58--72},
+  year={2024}
+}
+```
 
 ## Acknowledgments
-This work was supported by the NNSA Office of Defense Nuclear Nonproliferation Research and Development, U.S. Department of Energy, and Pacific Northwest National Laboratory, which is operated by Battelle Memorial Institute for the U.S. Department of Energy under Contract DE-AC05–76RLO1830. This software repository has been cleared by PNNL for public release as PNNL-**.
+This work was supported by the NNSA Office of Defense Nuclear Nonproliferation Research and Development, U.S. Department of Energy, and Pacific Northwest National Laboratory, which is operated by Battelle Memorial Institute for the U.S. Department of Energy under Contract DE-AC05–76RLO1830. This software repository has been cleared by PNNL for public release in EIDR 32968.
 
 This codebase is developed and modified from the <a src="https://github.com/haotian-liu/LLaVA">LLaVA</a> codebase.
 
